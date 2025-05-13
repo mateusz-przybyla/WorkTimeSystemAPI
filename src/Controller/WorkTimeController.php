@@ -38,6 +38,11 @@ final class WorkTimeController extends AbstractController
       return $this->json(['error' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
+    $businessErrors = $dto->validateWorkTimeBusinessLogic();
+    if (count($businessErrors) > 0) {
+      return $this->json(['error' => $businessErrors], Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
     $result = $workTimeService->register($dto);
 
     return $this->json($result, Response::HTTP_CREATED);
