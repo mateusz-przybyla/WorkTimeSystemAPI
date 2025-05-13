@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
@@ -18,6 +20,17 @@ class Employee
 
   #[ORM\Column(length: 255)]
   private ?string $surname = null;
+
+  /**
+   * @var Collection<int, WorkTime>
+   */
+  #[ORM\OneToMany(targetEntity: WorkTime::class, mappedBy: 'employee', orphanRemoval: true)]
+  private Collection $workTimes;
+
+  public function __construct()
+  {
+      $this->workTimes = new ArrayCollection();
+  }
 
   public function getId(): ?int
   {
@@ -46,5 +59,35 @@ class Employee
     $this->surname = $surname;
 
     return $this;
+  }
+
+  /**
+   * @return Collection<int, WorkTime>
+   */
+  public function getWorkTimes(): Collection
+  {
+      return $this->workTimes;
+  }
+
+  public function addWorkTime(WorkTime $workTime): static
+  {
+      if (!$this->workTimes->contains($workTime)) {
+          $this->workTimes->add($workTime);
+          $workTime->setEmployee($this);
+      }
+
+      return $this;
+  }
+
+  public function removeWorkTime(WorkTime $workTime): static
+  {
+      if ($this->workTimes->removeElement($workTime)) {
+          // set the owning side to null (unless already changed)
+          if ($workTime->getEmployee() === $this) {
+              $workTime->setEmployee(null);
+          }
+      }
+
+      return $this;
   }
 }
