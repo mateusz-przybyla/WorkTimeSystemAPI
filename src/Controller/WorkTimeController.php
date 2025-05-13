@@ -77,4 +77,33 @@ final class WorkTimeController extends AbstractController
 
     return $this->json($result, Response::HTTP_OK);
   }
+
+  #[Route('/api/summary/month', name: 'api_summary_month', methods: ['POST'])]
+  public function showMonthSummary(
+    Request $request,
+    ValidatorInterface $validator,
+    SerializerInterface $serializer,
+    WorkTimeService $workTimeService,
+  ): JsonResponse {
+    try {
+      $dto = $serializer->deserialize($request->getContent(), WorkTimeSummaryDto::class, 'json',  [
+        'datetime_format' => 'm.Y',
+      ]);
+    } catch (\Exception $e) {
+      return $this->json(['error' => 'Nieprawidłowy format JSON.'], Response::HTTP_BAD_REQUEST);
+    }
+
+    $errors = $validator->validate($dto);
+    if (count($errors) > 0) {
+      $errorMessages = [];
+      foreach ($errors as $error) {
+        $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
+      }
+      return $this->json(['error' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    $result = $workTimeService->summarizeMonth($dto);
+
+    return $this->json($result, Response::HTTP_OK);
+  }
 }

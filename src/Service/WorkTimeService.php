@@ -73,6 +73,38 @@ class WorkTimeService
     ];
   }
 
+  public function summarizeMonth(WorkTimeSummaryDto $dto): array
+  {
+    $employee = $this->employeeRepo->find($dto->employeeId);
+    if (!$employee) {
+      throw new NotFoundHttpException('Nie znaleziono pracownika.');
+    }
+
+    $start = (clone $dto->date)->modify('first day of this month')->setTime(0, 0);
+    $end = (clone $dto->date)->modify('last day of this month')->setTime(23, 59);
+    $workTimes = $this->workTimeRepo->findForPeriod($employee, $start, $end);
+
+    $totalHours = $this->calculateTotalRoundedHours($workTimes);
+
+    $normalHours = min($this->monthlyStandardHours, $totalHours);
+    $overtimeHours = max(0, $totalHours - $this->monthlyStandardHours);
+
+    return [
+      'response' => [
+        'ilość normalnych godzin z danego miesiąca' => $normalHours,
+        'stawka' => $this->workRate . ' PLN',
+        'ilość nadgodzin z danego miesiąca' => $overtimeHours,
+        'stawka nadgodzinowa' => $this->workRate * $this->overtimeMultiplier . ' PLN',
+        'suma po przeliczeniu' => ($this->calculateSalary($normalHours, $overtimeHours)) . ' PLN',
+      ]
+    ];
+  }
+
+  private function calculateSalary(float $normalHours, float $overtimeHours): float
+  {
+    return $normalHours * $this->workRate + $overtimeHours * $this->workRate * $this->overtimeMultiplier;
+  }
+
   private function calculateTotalRoundedHours(array $workTimes): float
   {
     $totalHours = 0;
