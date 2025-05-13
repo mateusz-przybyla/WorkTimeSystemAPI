@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Dto\WorkTimeDto;
 use App\Entity\WorkTime;
+use App\Dto\WorkTimeSummaryDto;
 use App\Repository\EmployeeRepository;
 use App\Repository\WorkTimeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +16,10 @@ class WorkTimeService
   public function __construct(
     private EntityManagerInterface $entityManager,
     private EmployeeRepository $employeeRepo,
-    private WorkTimeRepository $workTimeRepo
+    private WorkTimeRepository $workTimeRepo,
+    private float $workRate,
+    private int $monthlyStandardHours,
+    private float $overtimeMultiplier
   ) {}
 
   public function register(WorkTimeDto $dto): array
@@ -46,5 +50,43 @@ class WorkTimeService
     $this->entityManager->flush();
 
     return ['response' => ['Czas pracy został dodany.']];
+  }
+
+  public function summarizeDay(WorkTimeSummaryDto $dto): array
+  {
+    $employee = $this->employeeRepo->find($dto->employeeId);
+    if (!$employee) {
+      throw new NotFoundHttpException('Nie znaleziono pracownika.');
+    }
+
+    $workDay = \DateTime::createFromFormat('Y-m-d', $dto->date->format('Y-m-d'));
+    $workTimes = $this->workTimeRepo->findBy(['employee' => $employee, 'workDay' => $workDay]);
+
+    $totalHours = $this->calculateTotalRoundedHours($workTimes);
+
+    return [
+      'response' => [
+        'suma po przeliczeniu' => ($totalHours * $this->workRate) . ' PLN',
+        'ilość godzin z danego dnia' => $totalHours,
+        'stawka' => $this->workRate . ' PLN'
+      ]
+    ];
+  }
+
+  private function calculateTotalRoundedHours(array $workTimes): float
+  {
+    $totalHours = 0;
+    foreach ($workTimes as $entry) {
+      $interval = $entry->getStartTime()->diff($entry->getEndTime());
+      $hours = $this->roundToNearestHalfHour($interval->h + $interval->i / 60);
+      $totalHours += $hours;
+    }
+
+    return $totalHours;
+  }
+
+  private function roundToNearestHalfHour(float $hours): float
+  {
+    return round($hours * 2) / 2;
   }
 }

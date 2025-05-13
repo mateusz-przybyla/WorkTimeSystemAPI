@@ -53,7 +53,8 @@ final class WorkTimeController extends AbstractController
   public function showDaySummary(
     Request $request,
     ValidatorInterface $validator,
-    SerializerInterface $serializer
+    SerializerInterface $serializer,
+    WorkTimeService $workTimeService
   ): JsonResponse {
     try {
       $dto = $serializer->deserialize($request->getContent(), WorkTimeSummaryDto::class, 'json',  [
@@ -72,6 +73,8 @@ final class WorkTimeController extends AbstractController
       return $this->json(['error' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    return $this->json('validate', Response::HTTP_OK);
+    $result = $workTimeService->summarizeDay($dto);
+
+    return $this->json($result, Response::HTTP_OK);
   }
 }
