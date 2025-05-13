@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\WorkTimeDto;
+use App\Service\WorkTimeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +18,8 @@ final class WorkTimeController extends AbstractController
   public function create(
     Request $request,
     ValidatorInterface $validator,
-    SerializerInterface $serializer
+    SerializerInterface $serializer,
+    WorkTimeService $workTimeService,
   ): JsonResponse {
     try {
       $dto = $serializer->deserialize($request->getContent(), WorkTimeDto::class, 'json',  [
@@ -36,6 +38,8 @@ final class WorkTimeController extends AbstractController
       return $this->json(['error' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    return $this->json('validate', Response::HTTP_CREATED);
+    $result = $workTimeService->register($dto);
+
+    return $this->json($result, Response::HTTP_CREATED);
   }
 }
