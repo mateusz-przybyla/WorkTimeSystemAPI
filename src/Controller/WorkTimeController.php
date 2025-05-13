@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\WorkTimeDto;
+use App\Dto\WorkTimeSummaryDto;
 use App\Service\WorkTimeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,5 +47,31 @@ final class WorkTimeController extends AbstractController
     $result = $workTimeService->register($dto);
 
     return $this->json($result, Response::HTTP_CREATED);
+  }
+
+  #[Route('/api/summary/day', name: 'api_summary_day', methods: ['POST'])]
+  public function showDaySummary(
+    Request $request,
+    ValidatorInterface $validator,
+    SerializerInterface $serializer
+  ): JsonResponse {
+    try {
+      $dto = $serializer->deserialize($request->getContent(), WorkTimeSummaryDto::class, 'json',  [
+        'datetime_format' => 'd.m.Y',
+      ]);
+    } catch (\Exception $e) {
+      return $this->json(['error' => 'Nieprawidłowy format JSON.'], Response::HTTP_BAD_REQUEST);
+    }
+
+    $errors = $validator->validate($dto);
+    if (count($errors) > 0) {
+      $errorMessages = [];
+      foreach ($errors as $error) {
+        $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
+      }
+      return $this->json(['error' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    return $this->json('validate', Response::HTTP_OK);
   }
 }
