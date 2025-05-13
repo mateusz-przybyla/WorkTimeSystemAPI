@@ -2,32 +2,42 @@
 
 namespace App\Controller;
 
-use App\Entity\Employee;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Dto\EmployeeDto;
+use App\Service\EmployeeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class EmployeeController extends AbstractController
 {
   #[Route('/api/employee', name: 'api_create_employee', methods: ['POST'])]
-  public function index(
+  public function create(
     Request $request,
-    EntityManagerInterface $entityManager
+    ValidatorInterface $validator,
+    SerializerInterface $serializer,
+    EmployeeService $employeeService,
   ): JsonResponse {
-    $data = json_decode($request->getContent(), true);
+    try {
+      $dto = $serializer->deserialize($request->getContent(), EmployeeDto::class, 'json');
+    } catch (\Exception $e) {
+      return $this->json(['error' => 'Nieprawidłowy format JSON.'], Response::HTTP_BAD_REQUEST);
+    }
 
-    $employee = new Employee();
-    $employee->setFirstname($data['imię']);
-    $employee->setSurname($data['nazwisko']);
+    $errors = $validator->validate($dto);
+    if (count($errors) > 0) {
+      $errorMessages = [];
+      foreach ($errors as $error) {
+        $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
+      }
+      return $this->json(['error' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
 
-    $entityManager->persist($employee);
-    $entityManager->flush();
+    $employee = $employeeService->create($dto);
 
-    return new JsonResponse([
-      'response' => ['id' => $employee->getId()]
-    ], Response::HTTP_CREATED);
+    return $this->json(['response' => ['id' => $employee->getId()]], Response::HTTP_CREATED);
   }
 }
