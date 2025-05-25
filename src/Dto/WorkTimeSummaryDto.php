@@ -8,11 +8,11 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class WorkTimeSummaryDto
 {
   public function __construct(
-    #[SerializedName('unikalny identyfikator pracownika')]
+    #[SerializedName('employee_id')]
     #[Assert\GreaterThan(value: 0, message: 'ID musi być liczbą większą od 0.')]
     public readonly int $employeeId,
 
-    #[SerializedName('data')]
+    #[SerializedName('date')]
     public readonly \DateTime $date
   ) {}
 }
