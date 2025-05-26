@@ -24,7 +24,7 @@ class WorkTimeService
 
   public function register(WorkTimeDto $dto): array
   {
-    $employee = $this->employeeRepo->find($dto->employeeId);
+    $employee = $this->employeeRepo->findOneByUuid($dto->uuid);
     if (!$employee) {
       throw new NotFoundHttpException('Nie znaleziono pracownika.');
     }
@@ -54,7 +54,7 @@ class WorkTimeService
 
   public function summarizeDay(WorkTimeSummaryDto $dto): array
   {
-    $employee = $this->employeeRepo->find($dto->employeeId);
+    $employee = $this->employeeRepo->findOneByUuid($dto->uuid);
     if (!$employee) {
       throw new NotFoundHttpException('Nie znaleziono pracownika.');
     }
@@ -75,7 +75,7 @@ class WorkTimeService
 
   public function summarizeMonth(WorkTimeSummaryDto $dto): array
   {
-    $employee = $this->employeeRepo->find($dto->employeeId);
+    $employee = $this->employeeRepo->findOneByUuid($dto->uuid);
     if (!$employee) {
       throw new NotFoundHttpException('Nie znaleziono pracownika.');
     }

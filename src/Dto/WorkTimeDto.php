@@ -8,9 +8,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class WorkTimeDto
 {
   public function __construct(
-    #[SerializedName('employee_id')]
-    #[Assert\GreaterThan(value: 0, message: 'ID musi być liczbą większą od 0.')]
-    public readonly int $employeeId,
+    #[SerializedName('uuid')]
+    #[Assert\Uuid(message: 'UUID musi być poprawnym identyfikatorem.')]
+    public readonly string $uuid,
 
     #[SerializedName('starting_date_and_time')]
     public readonly \DateTime $startTime,

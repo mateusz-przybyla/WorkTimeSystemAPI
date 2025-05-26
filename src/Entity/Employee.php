@@ -6,6 +6,7 @@ use App\Repository\EmployeeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
@@ -27,9 +28,13 @@ class Employee
   #[ORM\OneToMany(targetEntity: WorkTime::class, mappedBy: 'employee', orphanRemoval: true)]
   private Collection $workTimes;
 
+  #[ORM\Column(type: 'uuid', unique: true)]
+  private ?Uuid $uuid = null;
+
   public function __construct()
   {
-      $this->workTimes = new ArrayCollection();
+    $this->uuid = Uuid::v4();
+    $this->workTimes = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -66,28 +71,33 @@ class Employee
    */
   public function getWorkTimes(): Collection
   {
-      return $this->workTimes;
+    return $this->workTimes;
   }
 
   public function addWorkTime(WorkTime $workTime): static
   {
-      if (!$this->workTimes->contains($workTime)) {
-          $this->workTimes->add($workTime);
-          $workTime->setEmployee($this);
-      }
+    if (!$this->workTimes->contains($workTime)) {
+      $this->workTimes->add($workTime);
+      $workTime->setEmployee($this);
+    }
 
-      return $this;
+    return $this;
   }
 
   public function removeWorkTime(WorkTime $workTime): static
   {
-      if ($this->workTimes->removeElement($workTime)) {
-          // set the owning side to null (unless already changed)
-          if ($workTime->getEmployee() === $this) {
-              $workTime->setEmployee(null);
-          }
+    if ($this->workTimes->removeElement($workTime)) {
+      // set the owning side to null (unless already changed)
+      if ($workTime->getEmployee() === $this) {
+        $workTime->setEmployee(null);
       }
+    }
 
-      return $this;
+    return $this;
+  }
+
+  public function getUuid(): ?Uuid
+  {
+    return $this->uuid;
   }
 }

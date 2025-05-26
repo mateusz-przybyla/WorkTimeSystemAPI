@@ -38,6 +38,6 @@ final class EmployeeController extends AbstractController
 
     $employee = $employeeService->create($dto);
 
-    return $this->json(['response' => ['id' => $employee->getId()]], Response::HTTP_CREATED);
+    return $this->json(['response' => ['uuid' => $employee->getUuid()]], Response::HTTP_CREATED);
   }
 }

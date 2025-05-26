@@ -40,18 +40,18 @@ class WorkTimeServiceTest extends TestCase
 
   public function testSummarizeMonthReturnsCorrectResponse(): void
   {
-    $employeeId = 1;
+    $uuid = "c6e35e8f-95a6-4af2-839f-ad0a90d23266";
     $date = new \DateTime('2024-05');
 
     $dto = new WorkTimeSummaryDto(
-      employeeId: $employeeId,
+      uuid: $uuid,
       date: $date
     );
 
     $employee = $this->createMock(Employee::class);
     $this->employeeRepo
-      ->method('find')
-      ->with($employeeId)
+      ->method('findOneByUuid')
+      ->with($uuid)
       ->willReturn($employee);
 
     $workTime1 = new WorkTime();
