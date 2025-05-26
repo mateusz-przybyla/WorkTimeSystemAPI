@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -20,11 +21,12 @@ final class EmployeeController extends AbstractController
     ValidatorInterface $validator,
     SerializerInterface $serializer,
     EmployeeService $employeeService,
+    TranslatorInterface $translator
   ): JsonResponse {
     try {
       $dto = $serializer->deserialize($request->getContent(), EmployeeDto::class, 'json');
     } catch (\Exception $e) {
-      return $this->json(['error' => 'Nieprawidłowy format JSON.'], Response::HTTP_BAD_REQUEST);
+      return $this->json(['error' =>  $translator->trans('invalid_json_format', [], 'exceptions')], Response::HTTP_BAD_REQUEST);
     }
 
     $errors = $validator->validate($dto);

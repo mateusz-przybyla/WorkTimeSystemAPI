@@ -10,6 +10,7 @@ use App\Repository\WorkTimeRepository;
 use App\Service\WorkTimeService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\Uuid;
 
 class WorkTimeServiceTest extends TestCase
 {
@@ -40,7 +41,7 @@ class WorkTimeServiceTest extends TestCase
 
   public function testSummarizeMonthReturnsCorrectResponse(): void
   {
-    $uuid = "c6e35e8f-95a6-4af2-839f-ad0a90d23266";
+    $uuid = new Uuid("c6e35e8f-95a6-4af2-839f-ad0a90d23266");
     $date = new \DateTime('2024-05');
 
     $dto = new WorkTimeSummaryDto(

@@ -1,0 +1,3 @@
+invalid_json_format: "Nieprawidłowy format JSON."
+employee_not_found: "Nie znaleziono pracownika."
+worktime_duplicate_for_day: "Pracownik już posiada zarejestrowany czas pracy w tym dniu."

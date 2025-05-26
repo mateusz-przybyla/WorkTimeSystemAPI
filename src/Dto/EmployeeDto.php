@@ -9,11 +9,11 @@ class EmployeeDto
 {
   public function __construct(
     #[SerializedName('firstname')]
-    #[Assert\NotBlank(message: 'Imię jest wymagane.')]
+    #[Assert\NotBlank(message: 'employee.errors.blank')]
     public readonly string $firstname,
 
     #[SerializedName('surname')]
-    #[Assert\NotBlank(message: 'Nazwisko jest wymagane.')]
+    #[Assert\NotBlank(message: 'employee.errors.blank')]
     public readonly string $surname
   ) {}
 }

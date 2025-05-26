@@ -1,0 +1,5 @@
+success:
+  worktime_added_successfully: "Czas pracy został dodany."
+errors:
+  datetime_invalid_order: "Data zakończenia musi być po dacie rozpoczęcia."
+  datetime_too_long: "Czas pracy nie może przekraczać 12 godzin."

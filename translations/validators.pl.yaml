@@ -1,0 +1,7 @@
+employee:
+  errors:
+    blank: 'To pole nie może być puste.'
+
+work:
+  errors:
+    blank: 'To pole nie może być puste.'

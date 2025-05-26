@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class WorkTimeController extends AbstractController
 {
@@ -21,13 +22,14 @@ final class WorkTimeController extends AbstractController
     ValidatorInterface $validator,
     SerializerInterface $serializer,
     WorkTimeService $workTimeService,
+    TranslatorInterface $translator
   ): JsonResponse {
     try {
       $dto = $serializer->deserialize($request->getContent(), WorkTimeDto::class, 'json',  [
         'datetime_format' => 'd.m.Y H:i',
       ]);
     } catch (\Exception $e) {
-      return $this->json(['error' => 'Nieprawidłowy format JSON.'], Response::HTTP_BAD_REQUEST);
+      return $this->json(['error' => $translator->trans('invalid_json_format', [], 'exceptions')], Response::HTTP_BAD_REQUEST);
     }
 
     $errors = $validator->validate($dto);
@@ -41,12 +43,13 @@ final class WorkTimeController extends AbstractController
 
     $businessErrors = $dto->validateWorkTimeBusinessLogic();
     if (count($businessErrors) > 0) {
-      return $this->json(['error' => $businessErrors], Response::HTTP_UNPROCESSABLE_ENTITY);
+      $translatedErrors = array_map(fn($key) => $translator->trans($key), $businessErrors);
+      return $this->json(['error' => $translatedErrors], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    $result = $workTimeService->register($dto);
+    $workTimeService->register($dto);
 
-    return $this->json($result, Response::HTTP_CREATED);
+    return $this->json(['response' => [$translator->trans('success.worktime_added_successfully')]], Response::HTTP_CREATED);
   }
 
   #[Route('/api/summary/day', name: 'api_summary_day', methods: ['POST'])]
@@ -54,14 +57,15 @@ final class WorkTimeController extends AbstractController
     Request $request,
     ValidatorInterface $validator,
     SerializerInterface $serializer,
-    WorkTimeService $workTimeService
+    WorkTimeService $workTimeService,
+    TranslatorInterface $translator
   ): JsonResponse {
     try {
       $dto = $serializer->deserialize($request->getContent(), WorkTimeSummaryDto::class, 'json',  [
         'datetime_format' => 'd.m.Y',
       ]);
     } catch (\Exception $e) {
-      return $this->json(['error' => 'Nieprawidłowy format JSON.'], Response::HTTP_BAD_REQUEST);
+      return $this->json(['error' => $translator->trans('invalid_json_format', [], 'exceptions')], Response::HTTP_BAD_REQUEST);
     }
 
     $errors = $validator->validate($dto);
@@ -84,13 +88,14 @@ final class WorkTimeController extends AbstractController
     ValidatorInterface $validator,
     SerializerInterface $serializer,
     WorkTimeService $workTimeService,
+    TranslatorInterface $translator
   ): JsonResponse {
     try {
       $dto = $serializer->deserialize($request->getContent(), WorkTimeSummaryDto::class, 'json',  [
         'datetime_format' => 'm.Y',
       ]);
     } catch (\Exception $e) {
-      return $this->json(['error' => 'Nieprawidłowy format JSON.'], Response::HTTP_BAD_REQUEST);
+      return $this->json(['error' => $translator->trans('invalid_json_format', [], 'exceptions')], Response::HTTP_BAD_REQUEST);
     }
 
     $errors = $validator->validate($dto);

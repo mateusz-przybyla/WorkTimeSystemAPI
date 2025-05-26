@@ -10,15 +10,15 @@ class WorkTimeDto
 {
   public function __construct(
     #[SerializedName('uuid')]
-    #[Assert\NotBlank(message: 'UUID jest wymagane.')]
+    #[Assert\NotBlank(message: 'work.errors.blank')]
     public readonly ?Uuid $uuid,
 
     #[SerializedName('startTime')]
-    #[Assert\NotBlank(message: 'Data i godzina rozpoczęcia pracy jest wymagana.')]
+    #[Assert\NotBlank(message: 'work.errors.blank')]
     public readonly ?\DateTime $startTime,
 
     #[SerializedName('endTime')]
-    #[Assert\NotBlank(message: 'Data i godzina zakończenia pracy jest wymagana.')]
+    #[Assert\NotBlank(message: 'work.errors.blank')]
     public readonly ?\DateTime $endTime
   ) {}
 
@@ -27,12 +27,12 @@ class WorkTimeDto
     $errors = [];
 
     if ($this->endTime <= $this->startTime) {
-      $errors[] = 'Data zakończenia musi być po dacie rozpoczęcia.';
+      $errors[] = 'errors.datetime_invalid_order';
     }
 
     $duration = ($this->endTime->getTimestamp() - $this->startTime->getTimestamp()) / 3600;
     if ($duration > 12) {
-      $errors[] = 'Czas pracy nie może przekraczać 12 godzin.';
+      $errors[] = 'errors.datetime_too_long';
     }
 
     return $errors;

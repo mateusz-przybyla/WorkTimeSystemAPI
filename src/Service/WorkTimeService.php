@@ -22,11 +22,11 @@ class WorkTimeService
     private float $overtimeMultiplier
   ) {}
 
-  public function register(WorkTimeDto $dto): array
+  public function register(WorkTimeDto $dto): void
   {
     $employee = $this->employeeRepo->findOneByUuid($dto->uuid);
     if (!$employee) {
-      throw new NotFoundHttpException('Nie znaleziono pracownika.');
+      throw new NotFoundHttpException('employee_not_found');
     }
 
     $workDay = \DateTime::createFromFormat('Y-m-d', $dto->startTime->format('Y-m-d'));
@@ -37,7 +37,7 @@ class WorkTimeService
     ]);
 
     if ($existing) {
-      throw new ConflictHttpException('Pracownik już posiada zarejestrowany czas pracy w tym dniu.');
+      throw new ConflictHttpException('worktime_duplicate_for_day');
     }
 
     $workTime = new WorkTime();
@@ -48,15 +48,13 @@ class WorkTimeService
 
     $this->entityManager->persist($workTime);
     $this->entityManager->flush();
-
-    return ['response' => ['Czas pracy został dodany.']];
   }
 
   public function summarizeDay(WorkTimeSummaryDto $dto): array
   {
     $employee = $this->employeeRepo->findOneByUuid($dto->uuid);
     if (!$employee) {
-      throw new NotFoundHttpException('Nie znaleziono pracownika.');
+      throw new NotFoundHttpException('employee_not_found');
     }
 
     $workDay = \DateTime::createFromFormat('Y-m-d', $dto->date->format('Y-m-d'));
@@ -77,7 +75,7 @@ class WorkTimeService
   {
     $employee = $this->employeeRepo->findOneByUuid($dto->uuid);
     if (!$employee) {
-      throw new NotFoundHttpException('Nie znaleziono pracownika.');
+      throw new NotFoundHttpException('employee_not_found');
     }
 
     $start = (clone $dto->date)->modify('first day of this month')->setTime(0, 0);

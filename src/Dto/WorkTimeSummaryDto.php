@@ -10,11 +10,11 @@ class WorkTimeSummaryDto
 {
   public function __construct(
     #[SerializedName('uuid')]
-    #[Assert\NotBlank(message: 'UUID jest wymagane.')]
+    #[Assert\NotBlank(message: 'work.errors.blank')]
     public readonly ?Uuid $uuid,
 
     #[SerializedName('date')]
-    #[Assert\NotBlank(message: 'Data jest wymagana.')]
+    #[Assert\NotBlank(message: 'work.errors.blank')]
     public readonly ?\DateTime $date
   ) {}
 }
