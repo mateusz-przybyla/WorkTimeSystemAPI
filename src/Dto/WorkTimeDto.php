@@ -4,19 +4,22 @@ namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Uid\Uuid;
 
 class WorkTimeDto
 {
   public function __construct(
     #[SerializedName('uuid')]
-    #[Assert\Uuid(message: 'UUID musi być poprawnym identyfikatorem.')]
-    public readonly string $uuid,
+    #[Assert\NotBlank(message: 'UUID jest wymagane.')]
+    public readonly ?Uuid $uuid,
 
-    #[SerializedName('starting_date_and_time')]
-    public readonly \DateTime $startTime,
+    #[SerializedName('startTime')]
+    #[Assert\NotBlank(message: 'Data i godzina rozpoczęcia pracy jest wymagana.')]
+    public readonly ?\DateTime $startTime,
 
-    #[SerializedName('closing_date_and_time')]
-    public readonly \DateTime $endTime
+    #[SerializedName('endTime')]
+    #[Assert\NotBlank(message: 'Data i godzina zakończenia pracy jest wymagana.')]
+    public readonly ?\DateTime $endTime
   ) {}
 
   public function validateWorkTimeBusinessLogic(): array

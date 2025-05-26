@@ -2,6 +2,7 @@
 
 namespace App\Dto;
 
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
@@ -9,10 +10,11 @@ class WorkTimeSummaryDto
 {
   public function __construct(
     #[SerializedName('uuid')]
-    #[Assert\Uuid(message: 'UUID musi być poprawnym identyfikatorem.')]
-    public readonly string $uuid,
+    #[Assert\NotBlank(message: 'UUID jest wymagane.')]
+    public readonly ?Uuid $uuid,
 
     #[SerializedName('date')]
-    public readonly \DateTime $date
+    #[Assert\NotBlank(message: 'Data jest wymagana.')]
+    public readonly ?\DateTime $date
   ) {}
 }
