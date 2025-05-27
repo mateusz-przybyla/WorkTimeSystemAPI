@@ -87,6 +87,10 @@ symfony console doctrine:migrations:migrate
 symfony server:start
 ```
 
+7. **Przetestuj:**
+
+Przetestuj funkcjonalność API np. za pomoca platformy Postman: https://www.postman.com/
+
 ---
 
 ## Endpointy
@@ -102,6 +106,7 @@ symfony server:start
     "response": "Witaj w WorkTimeSystem API."
 }
 ```
+Status kodu: `200 OK`
 
 ---
 
@@ -133,6 +138,13 @@ Status kodu: `201 Created`
 
 ```json
 {
+  "error": "Nieprawidłowy format JSON."
+}
+```
+Status kodu: `400 Bad Request`
+
+```json
+{
   "error": {
     "firstname": [
       "Imię jest wymagane."
@@ -144,13 +156,6 @@ Status kodu: `201 Created`
 }
 ```
 Status kodu: `422 Unprocessable Entity`
-
-```json
-{
-  "error": "Nieprawidłowy format JSON."
-}
-```
-Status kodu: `400 Bad Request`
 
 ---
 
@@ -183,13 +188,10 @@ Status kodu: `201 Created`
 
 ```json
 {
-  "error": [
-    "Data zakończenia musi być po dacie rozpoczęcia.",
-    "Czas pracy nie może przekraczać 12 godzin."
-  ]
+  "error": "Nieprawidłowy format JSON."
 }
 ```
-Status kodu: `422 Unprocessable Entity`
+Status kodu: `400 Bad Request`
 
 ```json
 {
@@ -208,6 +210,29 @@ Status kodu: `404 Not Found`
 }
 ```
 Status kodu: `409 Conflict`
+
+```json
+{
+  "error": {
+    "uuid": [
+      "To pole nie może być puste."
+    ],
+    "startTime": [
+      "To pole nie może być puste."
+    ],
+    "endTime": [
+      "To pole nie może być puste."
+    ]
+  }
+}
+{
+  "error": [
+    "Data zakończenia musi być po dacie rozpoczęcia.",
+    "Czas pracy nie może przekraczać 12 godzin."
+  ]
+}
+```
+Status kodu: `422 Unprocessable Entity`
 
 ---
 
@@ -241,12 +266,33 @@ Status kodu: `200 OK`
 
 ```json
 {
+  "error": "Nieprawidłowy format JSON."
+}
+```
+Status kodu: `400 Bad Request`
+
+```json
+{
   "error": [
     "Nie znaleziono pracownika."
   ]
 }
 ```
 Status kodu: `404 Not Found`
+
+```json
+{
+  "error": {
+    "uuid": [
+      "To pole nie może być puste."
+    ],
+    "date": [
+      "To pole nie może być puste."
+    ],
+  }
+}
+```
+Status kodu: `422 Unprocessable Entity`
 
 ---
 
@@ -272,7 +318,7 @@ Status kodu: `404 Not Found`
     "stawka": "20 PLN",
     "ilość nadgodzin z danego miesiąca": 5,
     "stawka nadgodzinowa": "40 PLN",
-    "suma po przeliczeniu": "1100 PLN"
+    "suma po przeliczeniu": "1000 PLN"
   }
 }
 ```
@@ -282,12 +328,33 @@ Status kodu: `200 OK`
 
 ```json
 {
+  "error": "Nieprawidłowy format JSON."
+}
+```
+Status kodu: `400 Bad Request`
+
+```json
+{
   "error": [
     "Nie znaleziono pracownika."
   ]
 }
 ```
 Status kodu: `404 Not Found`
+
+```json
+{
+  "error": {
+    "uuid": [
+      "To pole nie może być puste."
+    ],
+    "date": [
+      "To pole nie może być puste."
+    ],
+  }
+}
+```
+Status kodu: `422 Unprocessable Entity`
 
 ---
 
