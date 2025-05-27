@@ -95,7 +95,7 @@ symfony server:start
 
 **GET `/`**
 
-**- Odpowiedź:**
+- **Odpowiedź:**
 
 ```json
 {
@@ -103,13 +103,13 @@ symfony server:start
 }
 ```
 
---
+---
 
 ### Utworzenie pracownika
 
 **POST `/api/employee`**
 
-**- Przykładowe żądanie:**
+- **Przykładowe żądanie:**
 
 ```json
 {
@@ -118,7 +118,7 @@ symfony server:start
 }
 ```
 
-**- Przykładowa odpowiedź:**
+- **Przykładowa odpowiedź:**
 
 ```json
 {
@@ -129,7 +129,7 @@ symfony server:start
 ```
 Status kodu: `201 Created`
 
-**- Możliwe błędy:**
+- **Możliwe błędy:**
 
 ```json
 {
@@ -152,13 +152,13 @@ Status kodu: `422 Unprocessable Entity`
 ```
 Status kodu: `400 Bad Request`
 
---
+---
 
 ### Rejestracja czasu pracy
 
 **POST `/api/work-time`**
 
-**Przykładowe żądanie:**
+- **Przykładowe żądanie:**
 
 ```json
 {
@@ -168,7 +168,7 @@ Status kodu: `400 Bad Request`
 }
 ```
 
-**Przykładowa odpowiedź:**
+- **Przykładowa odpowiedź:**
 
 ```json
 {
@@ -179,7 +179,7 @@ Status kodu: `400 Bad Request`
 ```
 Status kodu: `201 Created`
 
-**Możliwe błędy:**
+- **Możliwe błędy:**
 
 ```json
 {
@@ -209,11 +209,13 @@ Status kodu: `404 Not Found`
 ```
 Status kodu: `409 Conflict`
 
+---
+
 ### Podsumowanie dnia
 
 **POST `/api/summary/day`**
 
-**Przykładowe żądanie:**
+- **Przykładowe żądanie:**
 
 ```json
 {
@@ -222,7 +224,7 @@ Status kodu: `409 Conflict`
 }
 ```
 
-**Przykładowa odpowiedź:**
+- **Przykładowa odpowiedź:**
 
 ```json
 {
@@ -235,7 +237,7 @@ Status kodu: `409 Conflict`
 ```
 Status kodu: `200 OK`
 
-**Możliwe błędy:**
+- **Możliwe błędy:**
 
 ```json
 {
@@ -246,11 +248,13 @@ Status kodu: `200 OK`
 ```
 Status kodu: `404 Not Found`
 
+---
+
 ### Podsumowanie miesiąca
 
 **POST `/api/summary/month`**
 
-**Przykładowe żądanie:**
+- **Przykładowe żądanie:**
 
 ```json
 {
@@ -259,7 +263,7 @@ Status kodu: `404 Not Found`
 }
 ```
 
-**Przykładowa odpowiedź:**
+- **Przykładowa odpowiedź:**
 
 ```json
 {
@@ -274,7 +278,7 @@ Status kodu: `404 Not Found`
 ```
 Status kodu: `200 OK`
 
-**Możliwe błędy:**
+- **Możliwe błędy:**
 
 ```json
 {
