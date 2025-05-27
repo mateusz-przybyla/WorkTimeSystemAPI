@@ -1,4 +1,4 @@
-# ⏱️ WorkTimeSystemAPI
+# WorkTimeSystemAPI
 
 API do rejestracji oraz podsumowywania czasu pracy pracowników. Projekt oparty na frameworku Symfony.
 
@@ -6,16 +6,20 @@ API do rejestracji oraz podsumowywania czasu pracy pracowników. Projekt oparty 
 
 ## Spis treści
 
-- [Funkcjonalności](#funkcjonalności)
+- [Funkcjonalności](#funkcjonalnosci)
 - [Wymagania](#wymagania)
 - [Instalacja](#instalacja)
 - [Endpointy](#endpointy)
+    - [Utworzenie pracownika](#utworzenie-pracownika)
+    - [Rejestracja czasu pracy](#rejestracja-czasu-pracy)
+    - [Podsumowanie dnia](#podsumowanie-dnia)
+    - [Podsumowanie miesiąca](#podsumowanie-miesiąca)
 - [Walidacja i błędy](#walidacja-i-błędy)
 - [Testy](#testy)
 
 ---
 
-## ✨ Funkcjonalności
+## Funkcjonalności
 
 - Utworzenie nowego pracownika
 - Rejestrowanie czasu pracy z walidacją (kolejność dat, maks. 12h, jedna rejestracja / dzień)
@@ -25,15 +29,19 @@ API do rejestracji oraz podsumowywania czasu pracy pracowników. Projekt oparty 
 - REST API w formacie JSON z odpowiednimi statusami kodu
 - Gotowa konfiguracja Docker Compose z bazą danych MariaDB i Adminerem
 
-## 📦 Wymagania
+---
+
+## Wymagania
 
 - PHP 8.2.12 lub nowszy
 - Symfony 7.2.6
 - Composer
 - Baza danych MariaDB 11.7.2
-- Docker (opcjonalnie - do lokalnej bazy danych)
+- Docker (opcjonalnie)
 
-## ⚙️ Instalacja
+---
+
+## Instalacja
 
 1. **Sklonuj repozytorium:**
 
@@ -79,17 +87,29 @@ symfony console doctrine:migrations:migrate
 symfony server:start
 ```
 
-## 🛠️ Endpointy
+---
 
-### 🏠 Strona powitania
+## Endpointy
+
+### Strona powitania
 
 **GET `/`**
 
-### 📌 Utworzenie pracownika
+**- Odpowiedź:**
+
+```json
+{
+    "response": "Witaj w WorkTimeSystem API."
+}
+```
+
+--
+
+### Utworzenie pracownika
 
 **POST `/api/employee`**
 
-**Przykładowe żądanie:**
+**- Przykładowe żądanie:**
 
 ```json
 {
@@ -98,7 +118,7 @@ symfony server:start
 }
 ```
 
-**Przykładowa odpowiedź:**
+**- Przykładowa odpowiedź:**
 
 ```json
 {
@@ -109,7 +129,7 @@ symfony server:start
 ```
 Status kodu: `201 Created`
 
-**Możliwe błędy:**
+**- Możliwe błędy:**
 
 ```json
 {
@@ -132,7 +152,9 @@ Status kodu: `422 Unprocessable Entity`
 ```
 Status kodu: `400 Bad Request`
 
-### 🕒 Rejestracja czasu pracy
+--
+
+### Rejestracja czasu pracy
 
 **POST `/api/work-time`**
 
@@ -187,7 +209,7 @@ Status kodu: `404 Not Found`
 ```
 Status kodu: `409 Conflict`
 
-### 📊 Podsumowanie dnia
+### Podsumowanie dnia
 
 **POST `/api/summary/day`**
 
@@ -224,7 +246,7 @@ Status kodu: `200 OK`
 ```
 Status kodu: `404 Not Found`
 
-### 📆 Podsumowanie miesiąca
+### Podsumowanie miesiąca
 
 **POST `/api/summary/month`**
 
@@ -281,7 +303,7 @@ Wszystkie wyjątki HTTP (np. `NotFoundHttpException`, `ConflictHttpException`) s
 
 ---
 
-## 🧪 Testy
+## Testy
 
 Testy jednostkowe uruchomisz za pomocą PHPUnit:
 
