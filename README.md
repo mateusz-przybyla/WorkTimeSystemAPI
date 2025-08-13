@@ -254,9 +254,9 @@ Status kodu: `422 Unprocessable Entity`
 ```json
 {
   "response": {
-    "suma po przeliczeniu": "160 PLN",
-    "ilość godzin z danego dnia": 8,
-    "stawka": "20 PLN"
+    "total_after_conversion": "160 PLN",
+    "hours_for_given_day": 8,
+    "rate": "20 PLN"
   }
 }
 ```
@@ -314,11 +314,11 @@ Status kodu: `422 Unprocessable Entity`
 ```json
 {
   "response": {
-    "ilość normalnych godzin z danego miesiąca": 40,
-    "stawka": "20 PLN",
-    "ilość nadgodzin z danego miesiąca": 5,
-    "stawka nadgodzinowa": "40 PLN",
-    "suma po przeliczeniu": "1000 PLN"
+    "regular_hours_in_given_month": 40,
+    "rate": "20 PLN",
+    "overtime_hours_in_given_month": 5,
+    "overtime_rate": "40 PLN",
+    "total_after_conversion": "1000 PLN"
   }
 }
 ```

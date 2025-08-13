@@ -64,9 +64,9 @@ class WorkTimeService
 
     return [
       'response' => [
-        'suma po przeliczeniu' => ($totalHours * $this->workRate) . ' PLN',
-        'ilość godzin z danego dnia' => $totalHours,
-        'stawka' => $this->workRate . ' PLN'
+        'total_after_conversion' => ($totalHours * $this->workRate) . ' PLN',
+        'hours_for_given_day' => $totalHours,
+        'rate' => $this->workRate . ' PLN'
       ]
     ];
   }
@@ -89,11 +89,11 @@ class WorkTimeService
 
     return [
       'response' => [
-        'ilość normalnych godzin z danego miesiąca' => $normalHours,
-        'stawka' => $this->workRate . ' PLN',
-        'ilość nadgodzin z danego miesiąca' => $overtimeHours,
-        'stawka nadgodzinowa' => $this->workRate * $this->overtimeMultiplier . ' PLN',
-        'suma po przeliczeniu' => ($this->calculateSalary($normalHours, $overtimeHours)) . ' PLN',
+        'regular_hours_in_given_month' => $normalHours,
+        'rate' => $this->workRate . ' PLN',
+        'overtime_hours_in_given_month' => $overtimeHours,
+        'overtime_rate' => $this->workRate * $this->overtimeMultiplier . ' PLN',
+        'total_after_conversion' => ($this->calculateSalary($normalHours, $overtimeHours)) . ' PLN',
       ]
     ];
   }
