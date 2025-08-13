@@ -77,7 +77,7 @@ class WorkTimeServiceTest extends TestCase
     $expectedSalary = 12.5 * 20; // brak nadgodzin, więc 250
 
     $this->assertIsArray($response);
-    $this->assertEquals($expectedTotalHours, $response['response']['ilość normalnych godzin z danego miesiąca']);
-    $this->assertEquals($expectedSalary . ' PLN', $response['response']['suma po przeliczeniu']);
+    $this->assertEquals($expectedTotalHours, $response['response']['regular_hours_in_given_month']);
+    $this->assertEquals($expectedSalary . ' PLN', $response['response']['total_after_conversion']);
   }
 }
